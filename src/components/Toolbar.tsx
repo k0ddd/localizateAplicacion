@@ -1,30 +1,44 @@
+// src/components/Toolbar.tsx
 import React from "react";
 
 interface ToolbarProps {
   addRectangle: () => void;
   addCircle: () => void;
-  addText: () => void;
   addLine: () => void;
-  addPolygon: () => void;
-  addEllipse: () => void;
-  addImage: () => void;
+  addText: () => void;
+  addImage: (file: File) => void;
 }
 
-export default function Toolbar({ addRectangle, addCircle, addText, addLine, addEllipse, addPolygon, addImage }: ToolbarProps) {
+const Toolbar: React.FC<ToolbarProps> = ({
+  addRectangle,
+  addCircle,
+  addLine,
+  addText,
+  addImage,
+}) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      addImage(e.target.files[0]);
+    }
+  };
+
   return (
-    <div className="flex gap-2 p-2 bg-gray-200 border-b">
-      <button onClick={addRectangle} className="p-2 bg-blue-500 text-white rounded">
-        Rectángulo
-      </button>
-      <button onClick={addCircle} className="p-2 bg-green-500 text-white rounded">
-        Círculo
-      </button>
-      <button onClick={addText} className="p-2 bg-purple-500 text-white rounded">
-        Texto
-      </button>
-      <button onClick={addLine} className="p-2 bg-yellow-500 text-white rounded">
-        Línea
-      </button>
+    <div style={{ marginBottom: "1rem", display: "flex", gap: "10px" }}>
+      <button onClick={addRectangle}>⬛ Rectángulo</button>
+      <button onClick={addCircle}>🔵 Círculo</button>
+      <button onClick={addLine}>📏 Línea</button>
+      <button onClick={addText}>📝 Texto</button>
+      <label style={{ cursor: "pointer" }}>
+        🖼️ Imagen
+        <input
+          type="file"
+          accept="image/*"
+          style={{ display: "none" }}
+          onChange={handleFileChange}
+        />
+      </label>
     </div>
   );
-}
+};
+
+export default Toolbar;

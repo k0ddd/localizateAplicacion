@@ -1,31 +1,40 @@
-import { useEffect, useRef } from "react";
-import * as fabric from "fabric";
+// src/components/Canvas.tsx
+import React, {
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  forwardRef,
+} from "react";
+import * as fabric from "fabric"; // 👈 Import correcto en v6
 
-interface CanvasProps {
-  canvasRef: React.RefObject<HTMLCanvasElement>;
-  setCanvas: (canvas: fabric.Canvas) => void;
+export interface CanvasHandle {
+  getCanvas: () => fabric.Canvas | null;
 }
 
-export default function Canvas({ canvasRef, setCanvas }: CanvasProps) {
-  useEffect(() => {
-    if (!canvasRef.current) return;
+const Canvas = forwardRef<CanvasHandle>((_, ref) => {
+  const canvasRef = useRef<fabric.Canvas | null>(null);
+  const canvasContainer = useRef<HTMLCanvasElement | null>(null);
 
-    const canvas = new fabric.Canvas(canvasRef.current, {
+  useEffect(() => {
+    if (!canvasContainer.current) return;
+
+    const canvas = new fabric.Canvas(canvasContainer.current, {
       width: 800,
       height: 600,
       backgroundColor: "#f3f3f3",
     });
-
-    setCanvas(canvas);
+    canvasRef.current = canvas;
 
     return () => {
       canvas.dispose();
     };
   }, []);
 
-  return (
-    <div className="flex justify-center p-4">
-      <canvas ref={canvasRef} />
-    </div>
-  );
-}
+  useImperativeHandle(ref, () => ({
+    getCanvas: () => canvasRef.current,
+  }));
+
+  return <canvas ref={canvasContainer} />;
+});
+
+export default Canvas;
