@@ -1,10 +1,4 @@
-// src/components/Canvas.tsx
-import React, {
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  forwardRef,
-} from "react";
+import React, { useEffect, useImperativeHandle, useRef, forwardRef } from "react";
 import * as fabric from "fabric"; // 👈 Import correcto en v6
 
 export interface CanvasHandle {
@@ -13,12 +7,12 @@ export interface CanvasHandle {
 
 const Canvas = forwardRef<CanvasHandle>((_, ref) => {
   const canvasRef = useRef<fabric.Canvas | null>(null);
-  const canvasContainer = useRef<HTMLCanvasElement | null>(null);
+  const htmlCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
-    if (!canvasContainer.current) return;
+    if (!htmlCanvasRef.current) return;
 
-    const canvas = new fabric.Canvas(canvasContainer.current, {
+    const canvas = new fabric.Canvas(htmlCanvasRef.current, {
       width: 800,
       height: 600,
       backgroundColor: "#f3f3f3",
@@ -34,7 +28,7 @@ const Canvas = forwardRef<CanvasHandle>((_, ref) => {
     getCanvas: () => canvasRef.current,
   }));
 
-  return <canvas ref={canvasContainer} />;
+  return <canvas ref={htmlCanvasRef} />;
 });
 
 export default Canvas;

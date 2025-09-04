@@ -4,39 +4,45 @@ import React from "react";
 interface ToolbarProps {
   addRectangle: () => void;
   addCircle: () => void;
+  addEllipse: () => void;
   addLine: () => void;
+  addPolygon: () => void;
   addText: () => void;
   addImage: (file: File) => void;
+  deleteSelected: () => void;
+  clearCanvas: () => void;
 }
 
 const Toolbar: React.FC<ToolbarProps> = ({
   addRectangle,
   addCircle,
+  addEllipse,
   addLine,
+  addPolygon,
   addText,
   addImage,
+  deleteSelected,
+  clearCanvas,
 }) => {
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      addImage(e.target.files[0]);
-    }
-  };
-
   return (
-    <div style={{ marginBottom: "1rem", display: "flex", gap: "10px" }}>
-      <button onClick={addRectangle}>⬛ Rectángulo</button>
-      <button onClick={addCircle}>🔵 Círculo</button>
-      <button onClick={addLine}>📏 Línea</button>
-      <button onClick={addText}>📝 Texto</button>
+    <div style={{ marginBottom: "10px" }}>
+      <button onClick={addRectangle}>▭ Rectángulo</button>
+      <button onClick={addCircle}>◯ Círculo</button>
+      <button onClick={addEllipse}>⬭ Elipse</button>
+      <button onClick={addLine}>／ Línea</button>
+      <button onClick={addPolygon}>🔺 Polígono</button>
+      <button onClick={addText}>T Texto</button>
       <label style={{ cursor: "pointer" }}>
-        🖼️ Imagen
+        📷 Subir imagen
         <input
           type="file"
           accept="image/*"
+          onChange={(e) => e.target.files && addImage(e.target.files[0])}
           style={{ display: "none" }}
-          onChange={handleFileChange}
         />
       </label>
+      <button onClick={deleteSelected}>🗑 Eliminar seleccionado</button>
+      <button onClick={clearCanvas}>❌ Borrar todo</button>
     </div>
   );
 };
